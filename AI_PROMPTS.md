@@ -2,7 +2,7 @@
 
 > **"Code with AI" 海选赛参赛作品** — 5G信号可视化看板
 > 技术栈：Streamlit + Pandas + PyDeck + NumPy + Pytest
-> AI 工具：Claude Code
+> AI 工具：Claude Code (DeepSeek V4)
 
 ---
 
