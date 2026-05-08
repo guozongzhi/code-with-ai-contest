@@ -174,13 +174,17 @@ with col1:
 
 with col2:
     st.subheader("📈 信号强度分布")
-    # 将RSRP按区间分组统计，使用数值索引
-    bins = [-120, -110, -100, -90, -80, -70, -60]
+    # 将RSRP按区间分组统计，使用纯Python方式避免pandas categorical问题
+    bins = [(-120, -110), (-110, -100), (-100, -90), (-90, -80), (-80, -70), (-70, -60)]
     labels = ['<-110', '-110~-100', '-100~-90', '-90~-80', '-80~-70', '>-70']
-    rsrp_binned = pd.cut(df["RSRP_dBm"], bins=bins, labels=labels, right=False)
-    rsrp_counts = rsrp_binned.value_counts().reindex(labels).reset_index()
-    rsrp_counts.columns = ['区间', '数量']
-    st.bar_chart(rsrp_counts.set_index('区间'), color="#FF6B6B")
+    counts = [0] * len(labels)
+    for val in df["RSRP_dBm"]:
+        for i, (low, high) in enumerate(bins):
+            if low <= val < high:
+                counts[i] += 1
+                break
+    chart_data = pd.DataFrame({"区间": labels, "数量": counts}).set_index("区间")
+    st.bar_chart(chart_data, color="#FF6B6B")
 
 # ==========================================
 # 数据统计信息
