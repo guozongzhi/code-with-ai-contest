@@ -6,6 +6,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import pydeck as pdk
 
 # ==========================================
 # 配置与数据加载
@@ -127,6 +128,38 @@ filtered_df["color"] = filtered_df["RSRP_dBm"].apply(get_signal_color)
 
 # 2D地图 (st.map)
 st.map(filtered_df, latitude="Latitude", longitude="Longitude", color="color")
+
+# 3D柱状图 (pydeck)
+st.subheader("📊 3D信号柱状图")
+
+# 归一化下载速率用于高度
+filtered_df["height"] = (filtered_df["Download_Mbps"] / filtered_df["Download_Mbps"].max()) * 500
+
+layer = pdk.Layer(
+    "ColumnLayer",
+    filtered_df,
+    get_position=["Longitude", "Latitude"],
+    get_elevation="height",
+    get_elevation_weight="Download_Mbps",
+    get_fill_color="color",
+    radius=50,
+    extruded=True,
+    pickable=True,
+)
+
+view_state = pdk.ViewState(
+    latitude=df["Latitude"].mean(),
+    longitude=df["Longitude"].mean(),
+    zoom=12,
+    pitch=45,
+)
+
+st.pydeck_chart(pdk.Deck(
+    map_style="mapbox://styles/mapbox/dark-v10",
+    initial_view_state=view_state,
+    layers=[layer],
+    tooltip={"text": "Band: {Band}\nRSRP: {RSRP_dBm} dBm\n下载: {Download_Mbps} Mbps"}
+))
 
 # ==========================================
 # 数据概览图表
