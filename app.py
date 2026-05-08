@@ -174,7 +174,10 @@ with col1:
 
 with col2:
     st.subheader("📈 信号强度分布")
-    st.bar_chart(df["RSRP_dBm"].hist(bins=20), color="#FF6B6B")
+    # 使用value_counts展示RSRP分布，更适合bar_chart
+    rsrp_bins = pd.cut(df["RSRP_dBm"], bins=10)
+    rsrp_counts = rsrp_bins.value_counts().sort_index()
+    st.bar_chart(rsrp_counts, color="#FF6B6B")
 
 # ==========================================
 # 数据统计信息
