@@ -174,9 +174,11 @@ with col1:
 
 with col2:
     st.subheader("📈 信号强度分布")
-    # 使用value_counts展示RSRP分布，更适合bar_chart
-    rsrp_bins = pd.cut(df["RSRP_dBm"], bins=10)
-    rsrp_counts = rsrp_bins.value_counts().sort_index()
+    # 将RSRP按区间分组统计，使用pd.cut返回的Series
+    bins = [-120, -110, -100, -90, -80, -70, -60]
+    labels = ['<-110', '-110~-100', '-100~-90', '-90~-80', '-80~-70', '>-70']
+    rsrp_binned = pd.cut(df["RSRP_dBm"], bins=bins, labels=labels, right=False)
+    rsrp_counts = rsrp_binned.value_counts().reindex(labels)
     st.bar_chart(rsrp_counts, color="#FF6B6B")
 
 # ==========================================
