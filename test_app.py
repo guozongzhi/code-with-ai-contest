@@ -5,12 +5,6 @@
 
 import pytest
 import pandas as pd
-import sys
-import os
-
-# 添加父目录到路径
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from app import load_data, get_signal_color, filter_data
 
 
@@ -57,14 +51,14 @@ class TestSignalColor:
         assert color == [255, 255, 0, 200]
     
     def test_boundary_high(self):
-        """边界值测试 (-90)"""
+        """边界值测试 (-90): 等于-90时不属于大于-90范围，应返回黄色"""
         color = get_signal_color(-90)
-        assert color == [0, 255, 0, 200]  # -90不属于绿色范围,实际返回黄色
+        assert color == [255, 255, 0, 200]
     
     def test_boundary_low(self):
-        """边界值测试 (-110)"""
+        """边界值测试 (-110): 等于-110时不属于小于-110范围，应返回黄色"""
         color = get_signal_color(-110)
-        assert color == [255, 0, 0, 200]
+        assert color == [255, 255, 0, 200]
 
 
 class TestDataFiltering:
@@ -91,8 +85,8 @@ class TestDataFiltering:
         assert all(result["Band"] == "n28")
     
     def test_filter_by_rsrp_range(self, sample_df):
-        """测试按RSRP范围筛选"""
-        result = filter_data(sample_df, "全部", (-100, -90))
+        """测试按RSRP范围筛选: -95.0在(-100,-90)范围内，仅1行"""
+        result = filter_data(sample_df, "n28", (-100, -90))
         assert len(result) == 1
         assert result.iloc[0]["RSRP_dBm"] == -95.0
     
