@@ -26,16 +26,16 @@ This project is a data visualization application designed for monitoring and ana
 | Feature | Description | 功能说明 |
 |---------|-------------|----------|
 | **Sidebar Filtering** | Real-time filtering by band and RSRP range | 侧边栏联动筛选（频段+RSRP范围） |
-| **3D Visualization** | PyDeck 3D column chart with height = download speed | 3D柱状图，高度随下载速率变化 |
+| **3D Visualization** | PyDeck 3D column chart with light map background | 3D柱状图（白色底图），高度随下载速率变化 |
 | **Data Statistics** | Key metrics: sample count, base stations, avg RSRP, avg speed | 数据统计：采样点、基站数、平均RSRP/下载速率 |
 | **Raw Data View** | Expandable data table | 可展开的原始数据表格 |
 
 ### 📊 Signal Color Coding | 信号颜色编码
 
 ```
-🟢 Green  | RSRP > -90 dBm  | Strong Signal   | 信号强
-🟡 Yellow | -110 < RSRP ≤ -90 dBm | Medium Signal | 信号中等
-🔴 Red    | RSRP ≤ -110 dBm | Weak Signal     | 信号弱
+🟢 Green  | RSRP > -90 dBm   | Strong Signal   | 信号强
+🟡 Yellow | -110 ≤ RSRP ≤ -90 dBm | Medium Signal | 信号中等
+🔴 Red    | RSRP < -110 dBm  | Weak Signal     | 信号弱
 ```
 
 ## 🛠️ Tech Stack | 技术栈
@@ -62,7 +62,12 @@ This project is a data visualization application designed for monitoring and ana
 git clone https://github.com/your-repo/code-with-ai-contest.git
 cd code-with-ai-contest
 
-# 2. Install dependencies | 安装依赖
+# 2. Create & activate virtual environment | 创建并激活虚拟环境
+python3 -m venv env
+source env/bin/activate  # Linux/Mac
+# env\Scripts\activate   # Windows
+
+# 3. Install dependencies | 安装依赖
 pip install -r requirements.txt
 ```
 
